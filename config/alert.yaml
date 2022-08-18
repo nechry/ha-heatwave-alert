@@ -1,0 +1,17 @@
+heat_wave_detected_warning_alert_active:
+  name: Heat wave detected Warning Alert Active
+  entity_id: binary_sensor.heat_wave_alert_active
+  state: "on"
+  repeat:
+    - 5
+    - 15
+    - 60
+  can_acknowledge: true
+  skip_first: false
+  message: >
+    {{ states('sensor.heat_wave_detected') }}
+  notifiers:
+    - Notify_Information
+  data:
+    inline_keyboard:
+      - "Acknowledge:/ack_heat_wave"

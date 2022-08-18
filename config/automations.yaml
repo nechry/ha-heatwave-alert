@@ -18,3 +18,23 @@
       message: Alert Stop
       callback_query_id: '{{ trigger.event.data.id }}'
   mode: single
+
+
+- id: '1659882653673'
+    alias: Notify_Information conditional
+    description: ''
+    trigger:
+    - platform: event
+      event_type: call_service
+      event_data:
+        domain: notify
+        service: Notify_Information
+    condition:
+    - condition: state
+      entity_id: binary_sensor.im_at_home
+      state: 'on'
+    action:
+    - service: notify.telegram_me
+      data:
+        message: '{{ trigger.event.data.service_data.message }}'
+    mode: single

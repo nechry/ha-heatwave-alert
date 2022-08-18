@@ -1,0 +1,7 @@
+heat_wave_notify:
+  name: Heat Wave Notify
+  icon: mdi:progress-wrench
+
+heat_wave_check:
+  name: Heat Wave Check
+  icon: mdi:progress-wrench

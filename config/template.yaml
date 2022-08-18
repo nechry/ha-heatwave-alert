@@ -1,0 +1,33 @@
+- sensor:
+    - name: "Heat wave Detected"
+      unique_id: heat_wave_detected
+      state: >
+        {% set bathroom = {'window': states.binary_sensor.bathroom_window_sensor_window_is_open, 'temperature': 'sensor.average_temperature_bathroom' } %}
+        {% set guest_bedroom = {'window': states.binary_sensor.guest_bedroom_windows, 'temperature': 'sensor.average_temperature_guest_bedroom' } %}
+        {% set kitchen = {'window': states.binary_sensor.kitchen_terrace_door_access_control_window_door_is_open, 'temperature': 'sensor.average_temperature_kitchen' } %}
+        {% set living_room = {'window': states.binary_sensor.living_room_door_sensor_door_is_open, 'temperature': 'sensor.average_temperature_living_room' } %}
+        {% set office = {'window': states.binary_sensor.office_window_sensor_contact, 'temperature': 'sensor.average_temperature_office' } %}
+        {%- set threshold = states('input_number.heat_wave_temperature_threshold') | int -%}
+        {%- set open_delay = states('input_number.heat_wave_window_open_delay') | int -%}        
+        {%- set ns = namespace(sensors='', report='') -%}
+        {%- set outside_temperature = states('sensor.weather_temperature') | float -%}    
+        {%- if outside_temperature  >= threshold -%}
+          {%- for room in ns.rooms -%}
+            {%- if room.window.state == 'on' -%}     
+              {%- if (as_timestamp(now()) - as_timestamp(room.window.last_changed))/60 > open_delay -%}            
+              {%- set delta_temperature = (outside_temperature - states(room.temperature) | float) -%}
+              {%- if delta_temperature > 1.0 -%}
+                {% set ns.sensors = ns.sensors + ' - ' + area_name(room.temperature) + ', différence de ' + delta_temperature | round(1) | string + '°C\n' -%}
+              {%- endif -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+        {% if ns.sensors | count > 0 %}    
+          {%- set ns.report = 'La température extérieur :' + outside_temperature | string + '°C\n' + 
+              'Recommandation de fermer les fenêtres suivantes : \n' + ns.sensors -%}
+          {{ ns.report | truncate(255, true, '...') }}
+        {% else %}
+          {{ 'unavailable' }}
+        {% endif %}
+      availability: "{{ is_state('input_boolean.heat_wave_check', 'on') and  states('sensor.weather_temperature') not in ['unavailable', 'unknown', 'none'] }}"

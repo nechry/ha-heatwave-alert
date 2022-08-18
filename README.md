@@ -34,3 +34,16 @@ For every rooms you wan an alert, you will need 2 sensors:
 - door/window sensor
 
 ## Configuration
+
+My yaml config files are splited into theres files:
+
+- alert.yaml
+- automations.yaml
+- input_boolean.yaml
+- input_number.yaml
+- notify.yaml
+- template.yaml
+
+## License
+
+[MIT](LICENSE)

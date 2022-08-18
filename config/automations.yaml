@@ -1,0 +1,20 @@
+- id: '1656602421770'
+  alias: Feedback - Acknowledge for Heat Wave
+  description: ''
+  trigger:
+  - platform: event
+    event_type: telegram_callback
+    event_data:
+      data: /ack_heat_wave
+  condition: []
+  action:
+  - service: alert.turn_off
+    data: {}
+    target:
+      entity_id: alert.heat_wave_detected_warning_alert_active
+  - service: telegram_bot.answer_callback_query
+    data:
+      show_alert: false
+      message: Alert Stop
+      callback_query_id: '{{ trigger.event.data.id }}'
+  mode: single

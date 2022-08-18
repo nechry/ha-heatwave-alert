@@ -1,0 +1,17 @@
+heat_wave_temperature_threshold:
+  name: "The threshold temperature for a heat wave"
+  initial: 28
+  min: 25
+  max: 30
+  step: 1
+  unit_of_measurement: '°C'
+  icon: mdi:thermometer-plus
+
+heat_wave_window_open_delay:
+  name: "Opening delay"
+  initial: 5
+  min: 0
+  max: 30
+  step: 1
+  unit_of_measurement: 'minute'
+  icon: mdi:timer-check

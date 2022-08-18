@@ -1,3 +1,8 @@
 - name: Notify_Information
   platform: group
   services: []
+
+- name: Telegram me
+  entity_id: telegram_me
+  platform: telegram
+  chat_id: !secret telegram_me

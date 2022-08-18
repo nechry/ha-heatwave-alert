@@ -1,0 +1,3 @@
+- name: Notify_Information
+  platform: group
+  services: []
